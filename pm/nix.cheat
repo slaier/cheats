@@ -1,0 +1,24 @@
+% nixosConfiguration, linux
+
+$ configuration: nix flake show --json 2>/dev/null | yq '.nixosConfigurations | keys | .[]'
+$ configuration_derivation: echo ".#nixosConfigurations.<configuration>.config.system.build.toplevel"
+
+% nix3-build, linux
+@ nixosConfiguration, linux
+
+# Build a nixosConfiguration from a flake
+nix build <configuration_derivation>
+
+% nix3-eval, linux
+@ nixosConfiguration, linux
+
+# Evaluate a nixosConfiguration from a flake
+nix eval --raw <configuration_derivation>
+
+% nixos-rebuild, linux
+@ nixosConfiguration, linux
+
+# Build and switch to the new configuration from a flake
+sudo nixos-rebuild <goal> --flake .#<configuration>
+
+$ goal: printf "switch\nboot\ntest"
